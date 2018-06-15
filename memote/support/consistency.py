@@ -199,7 +199,7 @@ def find_inconsistent_min_stoichiometry(model, atol=1e-13):
     metabolites = sorted(internal_mets, key=get_id)
     stoich, met_index, rxn_index = con_helpers.stoichiometry_matrix(
         metabolites, reactions)
-    left_ns = con_helpers.nullspace(stoich.T)
+    left_ns = con_helpers.nullspace_basis(stoich.T)
     # deal with numerical instabilities
     left_ns[np.abs(left_ns) < atol] = 0.0
     LOGGER.info("nullspace has dimension %d", left_ns.shape[1])
@@ -216,7 +216,7 @@ def find_inconsistent_min_stoichiometry(model, atol=1e-13):
             inc_minimal.add((met,))
             continue
         # expect a positive mass for the unconserved metabolite
-        problem.variables[met.id].lb = 1e-3
+        problem.variables[met.id].lb = 1e-4
         status = problem.optimize()
         while status == "optimal":
             LOGGER.debug("%s: status %s", met.id, status)

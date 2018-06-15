@@ -152,7 +152,7 @@ def nullspace(matrix, atol=1e-13, rtol=0.0):
     matrix = np.atleast_2d(matrix)
     _, sigma, vh = svd(matrix)
     tol = max(atol, rtol * sigma[0])
-    return np.compress(sigma < tol, vh, axis=0).T
+    return np.compress(sigma < tol, vh, axis=0).conj().T
 
 
 def nullspace_basis(stoichiometry_matrix, atol=1e-13, rtol=0):
